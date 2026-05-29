@@ -1,4 +1,4 @@
-﻿// Application state variables
+// Application state variables
 // Initialize Supabase Client
 let supabaseClient = null;
 if (typeof supabase !== 'undefined' && supabase.createClient) {
@@ -41,6 +41,32 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Bind text response actions
     document.getElementById("submit-text-btn").addEventListener("click", submitTextResponse);
+    
+    // Bind video controls and fallback error handling
+    const replayBtn = document.getElementById("replay-video-btn");
+    const qVideo = document.getElementById("question-video");
+    if (replayBtn && qVideo) {
+        replayBtn.addEventListener("click", () => {
+            qVideo.currentTime = 0;
+            qVideo.play().catch(err => console.log("Erro ao reproduzir vídeo:", err));
+        });
+    }
+    if (qVideo) {
+        qVideo.addEventListener("click", () => {
+            if (qVideo.paused) {
+                qVideo.play().catch(err => console.log("Erro ao reproduzir vídeo:", err));
+            } else {
+                qVideo.currentTime = 0;
+                qVideo.play().catch(err => console.log("Erro ao reproduzir vídeo:", err));
+            }
+        });
+        // Se o vídeo falhar ao carregar (por exemplo, arquivo ausente), oculta o player silenciosamente
+        qVideo.addEventListener("error", () => {
+            console.warn("Vídeo correspondente não encontrado ou falhou ao carregar. Ocultando o player.");
+            const videoContainer = document.getElementById("video-player-container");
+            if (videoContainer) videoContainer.classList.add("hide");
+        });
+    }
     
     // Fetch survey structure from API
     loadSurvey();
@@ -114,6 +140,26 @@ function renderQuestion() {
     // Reset inputs
     resetInputs();
     
+    // Manage Video Player
+    const videoContainer = document.getElementById("video-player-container");
+    const videoElement = document.getElementById("question-video");
+    
+    if (videoContainer && videoElement) {
+        // O nome do vídeo começa com o número da pergunta na ordem (1.mp4, 2.mp4, ..., 16.mp4)
+        const videoNumber = currentQuestionIndex + 1;
+        const videoUrl = `videos/${videoNumber}.mp4`;
+        
+        // Remove a classe hide para tentar carregar o player
+        videoContainer.classList.remove("hide");
+        videoElement.src = videoUrl;
+        videoElement.load();
+        
+        // Tenta iniciar a reprodução automática com som
+        videoElement.play().catch(err => {
+            console.log("Autoplay bloqueado pelo navegador. O usuário pode iniciar manualmente clicando no vídeo.", err);
+        });
+    }
+    
     // Handle question view types
     if (question.type === "choice") {
         document.getElementById("audio-text-view").classList.add("hide");
@@ -126,7 +172,6 @@ function renderQuestion() {
     }
 }
 
-// Render choice options (Quantitative survey)
 function renderOptions(options) {
     const container = document.getElementById("options-list");
     container.innerHTML = "";
