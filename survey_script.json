@@ -1,82 +1,57 @@
 [
   {
-    "id": "q_intro_1",
+    "id": "q_1",
     "type": "audio_text",
-    "question": "Seção I – Introdução\n\nFale um pouco sobre você e um pouco sobre suas atividades internas."
+    "question": "Apresentação e primeira pergunta"
   },
   {
-    "id": "q_intro_2",
+    "id": "q_2",
     "type": "audio_text",
-    "question": "Seção I – Introdução\n\nComente um pouco sobre a relação entre essas atividades e o impacto no mercado externo (pintores, revendas, frotistas e distribuidores)."
+    "question": "Pergunta 2"
   },
   {
-    "id": "q_desafios_1",
+    "id": "q_3",
     "type": "audio_text",
-    "question": "Seção II – Desafios\n\nPor favor, resuma quais são as maiores dificuldades, ou desafios, em relação a levar para o mercado externo aquilo que você planeja em suas atividades."
+    "question": "Pergunta 3"
   },
   {
-    "id": "q_lazzuril_1",
+    "id": "q_4",
     "type": "audio_text",
-    "question": "Seção III – Lazzuril\n\nVamos falar um pouco sobre a marca Lazzuril. Como você avalia o cenário atual e a perspectiva de futuro para a marca?"
+    "question": "Pergunta 4"
   },
   {
-    "id": "q_lazzuril_2",
+    "id": "q_5",
     "type": "audio_text",
-    "question": "Seção III – Lazzuril\n\nPensando na possibilidade de reposicionar a marca Lazzuril, o que você faria? Como isso impactaria, num primeiro momento, junto aos clientes?"
+    "question": "Pergunta 5"
   },
   {
-    "id": "q_lazzuril_3",
+    "id": "q_6",
     "type": "audio_text",
-    "question": "Seção III – Lazzuril\n\nInternamente, esse reposicionamento seria positivo em que sentido?"
+    "question": "Pergunta 6"
   },
   {
-    "id": "q_criterios_1",
+    "id": "q_7",
     "type": "audio_text",
-    "question": "Seção IV – Critérios\n\nVamos voltar ao mercado. Para você, quais são os atributos-chave de decisão de escolha de uma marca de produtos automotivos? Qual seria o critério mais relevante, aquele que diferencia de fato uma marca de outra?"
+    "question": "Pergunta 7"
   },
   {
-    "id": "q_criterios_2",
+    "id": "q_8",
     "type": "audio_text",
-    "question": "Seção IV – Critérios\n\nNa sua opinião, qual o atributo mais associado à Sherwin Williams, independente da categoria de produto? E qual está mais associado à marca Lazzuril?"
+    "question": "Pergunta 8"
   },
   {
-    "id": "q_concorrencia_1",
+    "id": "q_9",
     "type": "audio_text",
-    "question": "Seção V – Concorrência\n\nQuais seriam os dois concorrentes mais relevantes para a Sherwin Williams?"
+    "question": "Pergunta 9"
   },
   {
-    "id": "q_concorrencia_2",
+    "id": "q_10",
     "type": "audio_text",
-    "question": "Seção V – Concorrência\n\nE quais seriam esses dois concorrentes para a Lazzuril?"
+    "question": "Pergunta 10"
   },
   {
-    "id": "q_concorrencia_3",
-    "type": "audio_text",
-    "question": "Seção V – Concorrência\n\nPensando na possibilidade de que exista concorrência interna (Sherwin e Lazzuril), em quais categorias isso ocorre?"
-  },
-  {
-    "id": "q_produtos_1",
-    "type": "audio_text",
-    "question": "Seção VI – Produtos\n\nEm quais categorias de produto seria interessante focar a Sherwin Williams?"
-  },
-  {
-    "id": "q_produtos_2",
-    "type": "audio_text",
-    "question": "Seção VI – Produtos\n\nE em quais categorias focar a Lazzuril?"
-  },
-  {
-    "id": "q_produtos_3",
-    "type": "audio_text",
-    "question": "Seção VI – Produtos\n\nAs duas marcas poderiam conviver juntas em categorias similares? Em quais? Como isso ocorreria?"
-  },
-  {
-    "id": "q_produtos_4",
-    "type": "audio_text",
-    "question": "Seção VI – Produtos\n\nE qual o problema central nessa convivência, com as duas marcas, hoje, oferecendo produtos similares em termos de categoria, como massas, primers, etc.?"
-  },
-  {
-    "id": "q_encerramento_1",
-    "type": "audio_text",
-    "question": "Seção VII – Encerramento\n\nVamos finalizar com um exercício onde você está autorizado a excluir marcas, produtos, enfim, você tem carta branca para deixar a estrutura de marcas e produtos do jeito que você entende que irá gerar maior competitividade para a Cia. O que você faria?"
+    "id": "q_11",
+    "type": "final",
+    "question": "Encerramento"
   }
 ]

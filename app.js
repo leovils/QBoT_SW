@@ -42,13 +42,19 @@ document.addEventListener("DOMContentLoaded", () => {
     // Bind text response actions
     document.getElementById("submit-text-btn").addEventListener("click", submitTextResponse);
     
+    // Bind final finish button
+    const finishBtn = document.getElementById("finish-survey-btn");
+    if (finishBtn) {
+        finishBtn.addEventListener("click", showCompletedScreen);
+    }
+    
     // Bind video controls and fallback error handling
     const replayBtn = document.getElementById("replay-video-btn");
     const qVideo = document.getElementById("question-video");
     if (replayBtn && qVideo) {
         replayBtn.addEventListener("click", () => {
             if (currentQuestionIndex === 0) {
-                renderQuestion(); // Reinicia toda a sequência 1 + 2
+                renderQuestion(); // Reinicia toda a sequência 1 + 2 + 3
             } else {
                 qVideo.currentTime = 0;
                 qVideo.play().catch(err => console.log("Erro ao reproduzir vídeo:", err));
@@ -61,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 qVideo.play().catch(err => console.log("Erro ao reproduzir vídeo:", err));
             } else {
                 if (currentQuestionIndex === 0) {
-                    renderQuestion(); // Reinicia toda a sequência 1 + 2 ao clicar no vídeo
+                    renderQuestion(); // Reinicia toda a sequência 1 + 2 + 3 ao clicar no vídeo
                 } else {
                     qVideo.currentTime = 0;
                     qVideo.play().catch(err => console.log("Erro ao reproduzir vídeo:", err));
@@ -159,7 +165,7 @@ function renderQuestion() {
     const videoContainer = document.getElementById("video-player-container");
     const videoElement = document.getElementById("question-video");
     
-    if (videoContainer && videoElement) {
+        if (videoContainer && videoElement) {
         // Limpa tratadores de fim de vídeo anteriores para evitar disparos duplicados
         if (videoElement._endedHandler) {
             videoElement.removeEventListener("ended", videoElement._endedHandler);
@@ -167,28 +173,37 @@ function renderQuestion() {
         }
 
         if (currentQuestionIndex === 0) {
-            // Pergunta 1: toca o vídeo 1 (apresentação) e na sequência o vídeo 2 (pergunta 1)
+            // Pergunta 1: toca o vídeo 1 (apresentação), depois o vídeo 2 (abertura) e depois o vídeo 3 (primeira pergunta)
             videoContainer.classList.remove("hide");
             videoElement.src = "videos/1.mp4";
             videoElement.load();
             
-            const endedHandler = () => {
-                videoElement.src = "videos/2.mp4";
+            const playVideo3 = () => {
+                videoElement.src = "videos/3.mp4";
                 videoElement.load();
-                videoElement.play().catch(err => console.log("Erro ao tocar vídeo 2:", err));
-                videoElement.removeEventListener("ended", endedHandler);
+                videoElement.play().catch(err => console.log("Erro ao tocar vídeo 3:", err));
+                videoElement.removeEventListener("ended", playVideo3);
                 videoElement._endedHandler = null;
             };
             
-            videoElement.addEventListener("ended", endedHandler);
-            videoElement._endedHandler = endedHandler;
+            const playVideo2 = () => {
+                videoElement.src = "videos/2.mp4";
+                videoElement.load();
+                videoElement.play().catch(err => console.log("Erro ao tocar vídeo 2:", err));
+                videoElement.removeEventListener("ended", playVideo2);
+                videoElement.addEventListener("ended", playVideo3);
+                videoElement._endedHandler = playVideo3;
+            };
+            
+            videoElement.addEventListener("ended", playVideo2);
+            videoElement._endedHandler = playVideo2;
             
             videoElement.play().catch(err => {
                 console.log("Autoplay bloqueado pelo navegador.", err);
             });
         } else {
-            // Demais perguntas: toca o vídeo com número = index + 2 (já que o 2 rodou na primeira)
-            const videoNumber = currentQuestionIndex + 2;
+            // Demais perguntas: toca o vídeo correspondente (index + 3, pois a primeira rodou 1, 2 e 3)
+            const videoNumber = currentQuestionIndex + 3;
             const videoUrl = `videos/${videoNumber}.mp4`;
             
             videoContainer.classList.remove("hide");
@@ -200,14 +215,20 @@ function renderQuestion() {
             });
         }
     }
-    
+
     // Handle question view types
-    if (question.type === "choice") {
+    if (question.type === "final") {
+        document.getElementById("audio-text-view").classList.add("hide");
+        document.getElementById("choice-view").classList.add("hide");
+        document.getElementById("final-view").classList.remove("hide");
+    } else if (question.type === "choice") {
         document.getElementById("audio-text-view").classList.add("hide");
         document.getElementById("choice-view").classList.remove("hide");
+        document.getElementById("final-view").classList.add("hide");
         renderOptions(question.options);
     } else {
         document.getElementById("choice-view").classList.add("hide");
+        document.getElementById("final-view").classList.add("hide");
         document.getElementById("audio-text-view").classList.remove("hide");
         switchInputMode("audio"); // default to audio view
     }

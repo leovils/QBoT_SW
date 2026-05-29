@@ -124,12 +124,20 @@
                 </div>
 
                 <!-- Question Text -->
-                <div class="question-box">
+                <div class="question-box hide">
                     <h2 id="question-text">Carregando pergunta...</h2>
                 </div>
 
                 <!-- Answer Container -->
                 <div class="answer-container">
+                    <!-- Final Step View (No Response, just button) -->
+                    <div id="final-view" class="answer-view hide">
+                        <div class="final-step-box">
+                            <button id="finish-survey-btn" class="btn btn-primary btn-full btn-large">
+                                Terminar Entrevista <i class="fa-solid fa-circle-check"></i>
+                            </button>
+                        </div>
+                    </div>
                     <!-- Choice Question View (Quantitative) -->
                     <div id="choice-view" class="answer-view hide">
                         <div id="options-list" class="options-grid">
