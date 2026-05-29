@@ -143,7 +143,14 @@ function renderQuestion() {
     document.getElementById("question-index-label").innerText = `Pergunta ${currentQuestionIndex + 1} de ${questions.length}`;
     
     // Update question text
-    document.getElementById("question-text").innerText = question.question;
+    // Exibe apenas o título da seção no texto da tela, ocultando a pergunta completa (pois ela já é dita pelo avatar)
+    if (question.question.includes("\n")) {
+        const parts = question.question.split("\n");
+        document.getElementById("question-text").innerText = parts[0].trim();
+    } else {
+        // Se não tiver título de seção estruturado, deixa um cabeçalho simples indicando a etapa da entrevista
+        document.getElementById("question-text").innerText = `Pergunta ${currentQuestionIndex + 1}`;
+    }
     
     // Reset inputs
     resetInputs();
