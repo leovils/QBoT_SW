@@ -47,8 +47,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const qVideo = document.getElementById("question-video");
     if (replayBtn && qVideo) {
         replayBtn.addEventListener("click", () => {
-            qVideo.currentTime = 0;
-            qVideo.play().catch(err => console.log("Erro ao reproduzir vídeo:", err));
+            if (currentQuestionIndex === 0) {
+                renderQuestion(); // Reinicia toda a sequência 1 + 2
+            } else {
+                qVideo.currentTime = 0;
+                qVideo.play().catch(err => console.log("Erro ao reproduzir vídeo:", err));
+            }
         });
     }
     if (qVideo) {
@@ -56,8 +60,12 @@ document.addEventListener("DOMContentLoaded", () => {
             if (qVideo.paused) {
                 qVideo.play().catch(err => console.log("Erro ao reproduzir vídeo:", err));
             } else {
-                qVideo.currentTime = 0;
-                qVideo.play().catch(err => console.log("Erro ao reproduzir vídeo:", err));
+                if (currentQuestionIndex === 0) {
+                    renderQuestion(); // Reinicia toda a sequência 1 + 2 ao clicar no vídeo
+                } else {
+                    qVideo.currentTime = 0;
+                    qVideo.play().catch(err => console.log("Erro ao reproduzir vídeo:", err));
+                }
             }
         });
         // Se o vídeo falhar ao carregar (por exemplo, arquivo ausente), oculta o player silenciosamente
@@ -145,19 +153,45 @@ function renderQuestion() {
     const videoElement = document.getElementById("question-video");
     
     if (videoContainer && videoElement) {
-        // O nome do vídeo começa com o número da pergunta na ordem (1.mp4, 2.mp4, ..., 16.mp4)
-        const videoNumber = currentQuestionIndex + 1;
-        const videoUrl = `videos/${videoNumber}.mp4`;
-        
-        // Remove a classe hide para tentar carregar o player
-        videoContainer.classList.remove("hide");
-        videoElement.src = videoUrl;
-        videoElement.load();
-        
-        // Tenta iniciar a reprodução automática com som
-        videoElement.play().catch(err => {
-            console.log("Autoplay bloqueado pelo navegador. O usuário pode iniciar manualmente clicando no vídeo.", err);
-        });
+        // Limpa tratadores de fim de vídeo anteriores para evitar disparos duplicados
+        if (videoElement._endedHandler) {
+            videoElement.removeEventListener("ended", videoElement._endedHandler);
+            videoElement._endedHandler = null;
+        }
+
+        if (currentQuestionIndex === 0) {
+            // Pergunta 1: toca o vídeo 1 (apresentação) e na sequência o vídeo 2 (pergunta 1)
+            videoContainer.classList.remove("hide");
+            videoElement.src = "videos/1.mp4";
+            videoElement.load();
+            
+            const endedHandler = () => {
+                videoElement.src = "videos/2.mp4";
+                videoElement.load();
+                videoElement.play().catch(err => console.log("Erro ao tocar vídeo 2:", err));
+                videoElement.removeEventListener("ended", endedHandler);
+                videoElement._endedHandler = null;
+            };
+            
+            videoElement.addEventListener("ended", endedHandler);
+            videoElement._endedHandler = endedHandler;
+            
+            videoElement.play().catch(err => {
+                console.log("Autoplay bloqueado pelo navegador.", err);
+            });
+        } else {
+            // Demais perguntas: toca o vídeo com número = index + 2 (já que o 2 rodou na primeira)
+            const videoNumber = currentQuestionIndex + 2;
+            const videoUrl = `videos/${videoNumber}.mp4`;
+            
+            videoContainer.classList.remove("hide");
+            videoElement.src = videoUrl;
+            videoElement.load();
+            
+            videoElement.play().catch(err => {
+                console.log("Autoplay bloqueado pelo navegador.", err);
+            });
+        }
     }
     
     // Handle question view types
